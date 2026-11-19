@@ -10,6 +10,11 @@ Layout, top to bottom:
     vector illustration at the top
   * a strip of eight shorter items in two columns
   * a sources line along the bottom edge
+
+Revision 2: the short-items strip is shortened to one measured line
+per item (ellipsis guard so nothing can run into the other column
+or off the page), the sources line gets its own clear band, and the
+Vice City "VI" sign is filled so the letters stay legible.
 """
 
 from PIL import Image, ImageDraw, ImageFont
@@ -184,9 +189,9 @@ def art_vicecity(x, y, w, h):
                               else (120, 220, 255))
     pen.rectangle([x, y + h - 22, x + w, y + h], fill=(18, 16, 36))
     # neon "VI" sign
-    pen.rectangle([x + 196, y + 66, x + 292, y + 104], outline=(255, 80, 180),
-                  width=3)
-    pen.text((x + 218, y + 70), "VI", font=load(SANS_BOLD, 30),
+    pen.rectangle([x + 196, y + 60, x + 292, y + 98], fill=(28, 24, 52),
+                  outline=(255, 80, 180), width=3)
+    pen.text((x + 218, y + 64), "VI", font=load(SANS_BOLD, 30),
              fill=(255, 120, 200))
     # palm silhouettes along the boulevard
     for px in (30, 90, 360, 430):
@@ -252,10 +257,9 @@ for idx, story in enumerate(STORIES):
 
 # ---------------------------------------------------------------- short items
 STRIP = [
-    ("CYCLONE AKVAN", "nears landfall between Machilipatnam and Puri"),
+    ("CYCLONE AKVAN", "landfall due between Machilipatnam and Puri"),
     ("EU", "proposes a €45 billion loan for Ukraine"),
-    ("NVIDIA", "Jensen Huang resigns; acting CEO Colette Kress; "
-               "H-series chip shipments to China halted"),
+    ("NVIDIA", "Huang out; Kress acting CEO; China H-chip sales halted"),
     ("NASA", "Voyager 1 reaches one light-day from Earth"),
     ("KERCH BRIDGE", "road arch collapses after Ukrainian strikes"),
     ("EBOLA", "DR Congo outbreak passes 11,000 cases"),
@@ -264,21 +268,25 @@ STRIP = [
 ]
 
 strip_y = 886
-pen.rectangle([0, strip_y - 10, PAGE, 1006], fill=(238, 232, 220))
+pen.rectangle([0, strip_y - 10, PAGE, 1000], fill=(238, 232, 220))
 pen.line([0, strip_y - 10, PAGE, strip_y - 10], fill=GOLD, width=3)
 centred(pen, PAGE // 2, strip_y - 6, "—  ALSO TODAY  —",
         load(SANS_BOLD, 16), CRIMSON)
-col_w = 496
 for i, (lead, rest) in enumerate(STRIP):
     cx = 16 if i % 2 == 0 else 520
-    cy = strip_y + 22 + (i // 2) * 26
-    pen.text((cx, cy), "•  " + lead + " — ", font=load(SANS_BOLD, 16),
-             fill=NAVY)
-    lead_w = pen.textlength("•  " + lead + " — ", font=load(SANS_BOLD, 16))
-    pen.text((cx + lead_w, cy), rest, font=load(SANS, 16), fill=INK)
+    cy = strip_y + 20 + (i // 2) * 24
+    # One line per item: shrink the tail with an ellipsis rather than
+    # ever letting it run into the other column or off the page.
+    head = "•  " + lead + " — "
+    head_fnt, rest_fnt = load(SANS_BOLD, 14), load(SANS, 14)
+    head_w = pen.textlength(head, font=head_fnt)
+    while rest and pen.textlength(rest, font=rest_fnt) > 496 - 8 - head_w:
+        rest = rest[:-4].rstrip() + "…"
+    pen.text((cx, cy), head, font=head_fnt, fill=NAVY)
+    pen.text((cx + head_w, cy), rest, font=rest_fnt, fill=INK)
 
 # ---------------------------------------------------------------- sources
-centred(pen, PAGE // 2, 1008,
+centred(pen, PAGE // 2, 1006,
         "Sources: Reuters, AP, BBC, WHO reporting of 19 November 2026",
         load(SANS, 14), MUTED)
 
