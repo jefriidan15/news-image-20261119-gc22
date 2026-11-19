@@ -257,13 +257,13 @@ for idx, story in enumerate(STORIES):
 
 # ---------------------------------------------------------------- short items
 STRIP = [
-    ("CYCLONE AKVAN", "landfall due between Machilipatnam and Puri"),
+    ("CYCLONE AKVAN", "landfall due near Machilipatnam–Puri"),
     ("EU", "proposes a €45 billion loan for Ukraine"),
     ("NVIDIA", "Huang out; Kress acting CEO; China H-chip sales halted"),
     ("NASA", "Voyager 1 reaches one light-day from Earth"),
     ("KERCH BRIDGE", "road arch collapses after Ukrainian strikes"),
     ("EBOLA", "DR Congo outbreak passes 11,000 cases"),
-    ("AUSTRALIA", "sanctions Israeli settlers over West Bank expansion"),
+    ("AUSTRALIA", "sanctions Israeli settlers in the West Bank"),
     ("PEW", "Islam on track to be the world's largest religion by 2035"),
 ]
 
